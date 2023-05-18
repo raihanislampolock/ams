@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Asset_Location;
+use App\Models\AssetLocation;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +15,7 @@ class AssetLocationController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Asset_Location';
+    protected $title = 'Asset Location';
 
     /**
      * Make a grid builder.
@@ -24,10 +24,10 @@ class AssetLocationController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Asset_Location());
+        $grid = new Grid(new AssetLocation());
 
         $grid->column('id', __('Id'));
-        $grid->column('asset_location', __('Asset location'));
+        $grid->column('asset_location', __('Asset Location'));
         $grid->column('cd', __('Cd'));
 
         $grid->model()->orderBy('id', 'desc');
@@ -43,10 +43,10 @@ class AssetLocationController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Asset_Location::findOrFail($id));
+        $show = new Show(AssetLocation::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('asset_location', __('Asset location'));
+        $show->field('asset_location', __('Asset Location'));
         $show->field('cb', __('Cb'));
         $show->field('cd', __('Cd'));
         $show->field('ub', __('Ub'));
@@ -62,9 +62,9 @@ class AssetLocationController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Asset_Location());
+        $form = new Form(new AssetLocation());
 
-        $form->text('asset_location', __('Asset location'));
+        $form->text('asset_location', __('Asset Location'));
         $form->hidden('cb', __('Cb'))->value(auth()->user()->name);
         $form->hidden('ub', __('Ub'))->value(auth()->user()->name);
 

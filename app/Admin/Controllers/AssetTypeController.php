@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Asset_Type;
+use App\Models\AssetType;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +15,7 @@ class AssetTypeController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Asset_Type';
+    protected $title = 'Asset Type';
 
     /**
      * Make a grid builder.
@@ -24,10 +24,10 @@ class AssetTypeController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Asset_Type());
+        $grid = new Grid(new AssetType());
 
         $grid->column('id', __('Id'));
-        $grid->column('asset_type_name', __('Asset type name'));
+        $grid->column('asset_type_name', __('Asset Type'));
         $grid->column('cd', __('Cd'));
 
         $grid->model()->orderBy('id', 'desc');
@@ -43,10 +43,10 @@ class AssetTypeController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Asset_Type::findOrFail($id));
+        $show = new Show(AssetType::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('asset_type_name', __('Asset type name'));
+        $show->field('asset_type_name', __('Asset Type'));
         $show->field('cb', __('Cb'));
         $show->field('cd', __('Cd'));
         $show->field('ub', __('Ub'));
@@ -62,9 +62,9 @@ class AssetTypeController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Asset_Type());
+        $form = new Form(new AssetType());
 
-        $form->text('asset_type_name', __('Asset type name'));
+        $form->text('asset_type_name', __('Asset Type'));
         $form->hidden('cb', __('Cb'))->value(auth()->user()->name);
         $form->hidden('ub', __('Ub'))->value(auth()->user()->name);
 

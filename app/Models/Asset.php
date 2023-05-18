@@ -11,27 +11,27 @@ class Asset extends Model
     const CREATED_AT = 'cd';
     const UPDATED_AT = 'ud';
 
-    public function AssetTypefk()
+    public function assetType()
     {
-        return $this->hasOne(Asset_Type::class, 'id', 'asset_type_id');
+        return $this->hasOne(AssetType::class, 'id', 'asset_type_id');
     }
 
-    public function AssetModelfk()
+    public function assetModel()
     {
-        return $this->hasOne(Asset_Model::class, 'id', 'asset_model_id');
+        return $this->hasOne(AssetModel::class, 'id', 'asset_model_id');
     }
 
-    public function Vendorfk()
+    public function vendor()
     {
         return $this->hasOne(Vendor::class, 'id', 'vendor_id');
     }
 
-    public function AssetTransactionsfk()
+    public function assetTransactions()
     {
-        return $this->hasOne(Asset_Transactions::class, 'id', 'asset_transactions_id');
+        return $this->hasOne(AssetTransactions::class, 'id', 'asset_transactions_id');
     }
 
-    public function Manufacturerfk()
+    public function manufacturer()
     {
         return $this->hasOne(Manufacturer::class, 'id', 'manufacturer_id');
     }

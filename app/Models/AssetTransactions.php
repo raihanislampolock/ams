@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Asset_Transactions extends Model
+class AssetTransactions extends Model
 {
     protected $table = "asset_transactions";
     const CREATED_AT = 'cd';
     const UPDATED_AT = 'ud';
 
-    public function Modelfk()
+    public function assetModel()
     {
-        return $this->hasOne(Asset_Model::class, 'id', 'asset_model_id');
+        return $this->hasOne(AssetModel::class, 'id', 'asset_model_id');
     }
 }

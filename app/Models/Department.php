@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Asset_Type extends Model
+class Department extends Model
 {
-    protected $table = "asset_type";
+    protected $table = "department";
     const CREATED_AT = 'cd';
     const UPDATED_AT = 'ud';
 }

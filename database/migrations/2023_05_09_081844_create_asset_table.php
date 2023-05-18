@@ -23,7 +23,8 @@ class CreateAssetTable extends Migration
             $table->unsignedbiginteger('vendor_id');
             $table->unsignedbiginteger('asset_transactions_id');
             $table->unsignedbiginteger('manufacturer_id');
-            $table->date('servicing_date')->nullable();         
+            $table->string('mac_address', 255)->nullable();
+            $table->date('servicing_date')->nullable();
             $table->string('remarks', 255)->nullable();
             $table->string('cb', 255)->nullable();
             $table->timestamp('cd')->default(DB::raw('CURRENT_TIMESTAMP'));
