@@ -37,7 +37,7 @@ class AssetController extends AdminController
         $grid->manufacturer()->name('Manufacturer Name');
         $grid->column('mac_address', __('Mac Address'));
         $grid->column('servicing_date', __('Servicing Date'))->editable('date');
-        $grid->column('remarks', __('Remarks'));
+        $grid->column('remarks', __('Remarks'))->editable('text');
         $grid->column('cd', __('Cd'));
 
         $grid->model()->orderBy('id', 'desc');
@@ -89,7 +89,8 @@ class AssetController extends AdminController
 
         $Model = [];
         $Assets = \App\Models\AssetModel::all();
-        foreach ($Assets as $asset) {
+        foreach ($Assets as $asset)
+        {
             $Model[$asset->id] = $asset->asset_model_id . $asset->model_name . ' - ' . $asset->vendor->company_name . ' - ' . $asset->manufacturer->name;
         }
         $form->select('asset_model_id', __('Asset Model'))->options($Model);
