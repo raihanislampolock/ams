@@ -86,8 +86,14 @@ class AssetController extends AdminController
 
         $AssetType = \App\Models\AssetType::pluck('asset_type_name', 'id')->toArray();
         $form->select('asset_type_id', __('Asset Type'))->options($AssetType);
-        $Model = \App\Models\AssetModel::pluck('model_name', 'id')->toArray();
-        $form->select('asset_model_id', __('Model Name'))->options($Model);
+
+        $Model = [];
+        $Assets = \App\Models\AssetModel::all();
+        foreach ($Assets as $asset) {
+            $Model[$asset->id] = $asset->asset_model_id . $asset->model_name . ' - ' . $asset->vendor->company_name . ' - ' . $asset->manufacturer->name;
+        }
+        $form->select('asset_model_id', __('Asset Model'))->options($Model);
+        
         $form->text('asset_configuration', __('Asset configuration'));
         $form->text('asset_sn_number', __('Asset SN'));
         $form->text('tagging_code', __('Tagging Code'))->default(time())->readonly();

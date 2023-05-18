@@ -35,4 +35,5 @@ class Asset extends Model
     {
         return $this->hasOne(Manufacturer::class, 'id', 'manufacturer_id');
     }
+
 }
