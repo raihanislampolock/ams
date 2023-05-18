@@ -15,7 +15,7 @@ class AssetTransactionsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Asset Transactions';
+    protected $title = 'AssetTransactions';
 
     /**
      * Make a grid builder.
@@ -30,6 +30,7 @@ class AssetTransactionsController extends AdminController
         $grid->assetModel()->model_name('Asset Model');
         $grid->column('asset_price', __('Asset Price'));
         $grid->column('asset_purchase_date', __('Asset Purchase Date'));
+        $grid->column('asset_purchase_request', __('Asset Purchase Request'));
         $grid->column('asset_purchase_order', __('Asset Purchase Order'));
         $grid->column('asset_warranty_date', __('Asset Warranty Date'));
         $grid->column('cd', __('Cd'));
@@ -53,6 +54,7 @@ class AssetTransactionsController extends AdminController
         $show->field('asset_model_id', __('Asset model id'));
         $show->field('asset_price', __('Asset price'));
         $show->field('asset_purchase_date', __('Asset purchase date'));
+        $show->field('asset_purchase_request', __('Asset purchase request'));
         $show->field('asset_purchase_order', __('Asset purchase order'));
         $show->field('asset_warranty_date', __('Asset warranty date'));
         $show->field('cb', __('Cb'));
@@ -76,8 +78,9 @@ class AssetTransactionsController extends AdminController
         $form->select('asset_model_id', __('Asset Model'))->options($Model);
         $form->text('asset_price', __('Asset Price'));
         $form->date('asset_purchase_date', __('Asset Purchase Date'))->default(date('Y-m-d'));
+        $form->text('asset_purchase_request', __('Asset purchase request'));
         $form->text('asset_purchase_order', __('Asset Purchase Order'));
-        $form->date('asset_warranty_date', __('Asset Warranty Date'));
+        $form->date('asset_warranty_date', __('Asset Warranty Date'))->default(date('Y-m-d'));
         $form->hidden('cb', __('Cb'))->value(auth()->user()->name);
         $form->hidden('ub', __('Ub'))->value(auth()->user()->name);
 

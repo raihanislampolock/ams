@@ -34,7 +34,7 @@ class AssetTrackingController extends AdminController
         $grid->employee()->emp_id('Employee ID');
         $grid->employee()->emp_name('Employee Name');
         $grid->asset()->asset_sn_number('Asset SN');
-        $grid->column('asset.asset_model_id', 'Asset Model')->display(function ($asset_model_id ) {
+        $grid->column('asset.asset_model_id', 'Asset Model')->display(function ($asset_model_id) {
             $assetModel = AssetModel::find($asset_model_id);
              $model_name = $assetModel->model_name??'N/A';
              $assetType = AssetType::find($assetModel->asset_type_id);
@@ -53,7 +53,7 @@ class AssetTrackingController extends AdminController
         $grid->assetLocation()->asset_location('Asset Location');
         $grid->column('assign_date', __('Assign Date'));
         $grid->asset()->mac_address('Mac Address');
-        $grid->column('remarks', __('Remarks'));
+        $grid->column('remarks', __('Remarks'))->editable('text');
         $grid->column('cd', __('Cd'));
 
         $grid->model()->orderBy('id', 'desc');

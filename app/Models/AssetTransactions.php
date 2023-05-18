@@ -15,4 +15,5 @@ class AssetTransactions extends Model
     {
         return $this->hasOne(AssetModel::class, 'id', 'asset_model_id');
     }
+    
 }

@@ -16,7 +16,6 @@ class AssetModel extends Model
         return $this->hasOne(AssetType::class, 'id', 'asset_type_id');
     }
  
-
     public function manufacturer()
     {
         return $this->hasOne(Manufacturer::class, 'id', 'manufacturer_id');

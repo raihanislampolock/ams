@@ -18,6 +18,7 @@ class CreateAssetTransactionsTable extends Migration
             $table->unsignedbiginteger('asset_model_id');
             $table->string('asset_price', 255);
             $table->date('asset_purchase_date');
+            $table->string('asset_purchase_request', 255);
             $table->string('asset_purchase_order', 255);
             $table->date('asset_warranty_date');
             $table->string('cb', 255)->nullable();
