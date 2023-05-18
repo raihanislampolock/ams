@@ -36,7 +36,7 @@ class AssetController extends AdminController
         $grid->assetTransactions()->asset_price('Asset Price');
         $grid->manufacturer()->name('Manufacturer Name');
         $grid->column('mac_address', __('Mac Address'));
-        $grid->column('servicing_date', __('Servicing Date'));
+        $grid->column('servicing_date', __('Servicing Date'))->editable('date');
         $grid->column('remarks', __('Remarks'));
         $grid->column('cd', __('Cd'));
 
