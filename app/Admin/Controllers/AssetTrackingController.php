@@ -55,6 +55,7 @@ class AssetTrackingController extends AdminController
         $grid->column('remarks', __('Remarks'));
         $grid->SNNumberfk()->mac_address('Mac Address');
         $grid->column('cd', __('Cd'));
+
         
 
         return $grid;
