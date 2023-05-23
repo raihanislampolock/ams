@@ -30,4 +30,16 @@ class AssetTracking extends Model
     {
         return $this->hasOne(AssetLocation::class, 'id', 'asset_location_id');
     }
+    public function emp()
+    {
+        return $this->belongsTo(Employee::class, 'emp_id');
+    }
+    public function depart()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+    public function ast()
+    {
+        return $this->belongsTo(Asset::class, 'asset_id');
+    }
 }

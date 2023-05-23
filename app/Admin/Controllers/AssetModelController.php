@@ -26,12 +26,12 @@ class AssetModelController extends AdminController
     {
         $grid = new Grid(new AssetModel());
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->assetType()->asset_type_name('Asset Type');
         $grid->manufacturer()->name('Manufacturer');
         $grid->vendor()->company_name('Vendor');
         $grid->column('model_name', __('Model'));
-        $grid->column('cd', __('Cd'));
+        $grid->column('cd', __('Cd'))->sortable();
 
         $grid->filter(function ($filter) {
             $filter->like('model_name', __('Model'));

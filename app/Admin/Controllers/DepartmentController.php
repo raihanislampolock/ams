@@ -26,10 +26,10 @@ class DepartmentController extends AdminController
     {
         $grid = new Grid(new Department());
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->column('name', __('Name'));
         $grid->column('short_name', __('Short Name'));
-        $grid->column('cd', __('Cd'));
+        $grid->column('cd', __('Cd'))->sortable();
 
         $grid->filter(function ($filter) {
             $filter->like('name', __('Name'));

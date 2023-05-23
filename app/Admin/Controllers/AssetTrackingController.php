@@ -11,6 +11,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 Use Encore\Admin\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class AssetTrackingController extends AdminController
 {
@@ -29,9 +30,9 @@ class AssetTrackingController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new AssetTracking());
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->department()->name('Department');
-        $grid->employee()->emp_id('Employee ID');
+        $grid->employee()->emp_id('Employee ID')->sortable();
         $grid->employee()->emp_name('Employee Name');
         $grid->asset()->asset_sn_number('Asset SN');
         $grid->column('asset.asset_model_id', 'Asset Model')->display(function ($asset_model_id) {
@@ -51,10 +52,25 @@ class AssetTrackingController extends AdminController
         });
         
         $grid->assetLocation()->asset_location('Asset Location');
-        $grid->column('assign_date', __('Assign Date'));
+        $grid->column('assign_date', __('Assign Date'))->sortable();
         $grid->asset()->mac_address('Mac Address');
         $grid->column('remarks', __('Remarks'))->editable('text');
-        $grid->column('cd', __('Cd'));
+        $grid->column('cd', __('Cd'))->sortable();
+
+        $grid->quickSearch(function ($model, $query) {
+            $model->orWhereHas('emp', function (Builder $queryr) use ($query) {
+                $queryr->where('emp_id', 'like', "%{$query}%");
+            });
+            $model->orWhereHas('emp', function (Builder $queryr) use ($query) {
+                $queryr->where('emp_name', 'like', "%{$query}%");
+            });
+            $model->orWhereHas('depart', function (Builder $queryr) use ($query) {
+                $queryr->where('name', 'like', "%{$query}%");
+            });
+            $model->orWhereHas('ast', function (Builder $queryr) use ($query) {
+                $queryr->where('asset_sn_number', 'like', "%{$query}%");
+            });
+        });
 
 
         $grid->model()->orderBy('id', 'desc');
