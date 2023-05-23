@@ -56,7 +56,9 @@ class AssetTrackingController extends AdminController
         $grid->column('remarks', __('Remarks'))->editable('text');
         $grid->column('cd', __('Cd'));
 
+
         $grid->model()->orderBy('id', 'desc');
+
 
         return $grid;
     }
