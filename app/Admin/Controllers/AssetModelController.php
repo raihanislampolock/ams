@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Asset_Model;
+use App\Models\AssetModel;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +15,7 @@ class AssetModelController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Asset_Model';
+    protected $title = 'Asset Model';
 
     /**
      * Make a grid builder.
@@ -24,14 +24,18 @@ class AssetModelController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Asset_Model());
+        $grid = new Grid(new AssetModel());
 
         $grid->column('id', __('Id'));
-        $grid->AssetTypefk()->asset_type_name('Asset Type');
-        $grid->Manufacturerfk()->name('Manufacturer Name');
-        $grid->Vendorfk()->company_name('Vendor Name');
-        $grid->column('model_name', __('Model name'));
+        $grid->assetType()->asset_type_name('Asset Type');
+        $grid->manufacturer()->name('Manufacturer');
+        $grid->vendor()->company_name('Vendor');
+        $grid->column('model_name', __('Model'));
         $grid->column('cd', __('Cd'));
+
+        $grid->filter(function ($filter) {
+            $filter->like('model_name', __('Model'));
+        });
 
         $grid->model()->orderBy('id', 'desc');
 
@@ -46,7 +50,7 @@ class AssetModelController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Asset_Model::findOrFail($id));
+        $show = new Show(AssetModel::findOrFail($id));
 
         $show->field('id', __('Id'));
         $show->field('asset_type_id', __('Asset type id'));
@@ -68,18 +72,16 @@ class AssetModelController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Asset_Model());
+        $form = new Form(new AssetModel());
 
-        $Type = \App\Models\Asset_Type::pluck('asset_type_name', 'id')->toArray();
+        $Type = \App\Models\AssetType::pluck('asset_type_name', 'id')->toArray();
         $form->select('asset_type_id', __('Asset Type'))->options($Type);
-
-        $Manuf = \App\Models\Manufacturer::pluck('name', 'id')->toArray();
-        $form->select('manufacturer_id', __('Manufacturer'))->options($Manuf);
-
+        $Manufacturer = \App\Models\Manufacturer::pluck('name', 'id')->toArray();
+        $form->select('manufacturer_id', __('Manufacturer'))->options($Manufacturer);
         $Vendor = \App\Models\Vendor::pluck('company_name', 'id')->toArray();
         $form->select('vendor_id', __('Vendor'))->options($Vendor);
 
-        $form->text('model_name', __('Model name'));
+        $form->text('model_name', __('Model'));
         $form->hidden('cb', __('Cb'))->value(auth()->user()->name);
         $form->hidden('ub', __('Ub'))->value(auth()->user()->name);
 

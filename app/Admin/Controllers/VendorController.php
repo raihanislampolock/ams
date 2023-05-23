@@ -27,12 +27,16 @@ class VendorController extends AdminController
         $grid = new Grid(new Vendor());
 
         $grid->column('id', __('Id'));
-        $grid->column('company_name', __('Company name'));
-        $grid->column('company_address', __('Company address'));
-        $grid->column('poc_name', __('Poc name'));
-        $grid->column('poc_number', __('Poc number'));
-        $grid->column('poc_email', __('Poc email'));
+        $grid->column('company_name', __('Company Name'));
+        $grid->column('company_address', __('Company Address'));
+        $grid->column('poc_name', __('Poc Name'));
+        $grid->column('poc_number', __('Poc Contact Number'));
+        $grid->column('poc_email', __('Poc Email'));
         $grid->column('cd', __('Cd'));
+
+        $grid->filter(function ($filter) {
+            $filter->like('company_name', __('Company Name'));
+        });
 
         $grid->model()->orderBy('id', 'desc');
 
@@ -50,11 +54,11 @@ class VendorController extends AdminController
         $show = new Show(Vendor::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('company_name', __('Company name'));
-        $show->field('company_address', __('Company address'));
-        $show->field('poc_name', __('Poc name'));
-        $show->field('poc_number', __('Poc number'));
-        $show->field('poc_email', __('Poc email'));
+        $show->field('company_name', __('Company Name'));
+        $show->field('company_address', __('Company Address'));
+        $show->field('poc_name', __('Poc Name'));
+        $show->field('poc_number', __('Poc Contact Number'));
+        $show->field('poc_email', __('Poc Email'));
         $show->field('cb', __('Cb'));
         $show->field('cd', __('Cd'));
         $show->field('ub', __('Ub'));
@@ -72,11 +76,11 @@ class VendorController extends AdminController
     {
         $form = new Form(new Vendor());
 
-        $form->text('company_name', __('Company name'));
-        $form->text('company_address', __('Company address'));
-        $form->text('poc_name', __('Poc name'));
-        $form->text('poc_number', __('Poc number'));
-        $form->text('poc_email', __('Poc email'));
+        $form->text('company_name', __('Company Name'));
+        $form->text('company_address', __('Company Address'));
+        $form->text('poc_name', __('Poc Name'));
+        $form->text('poc_number', __('Poc Contact Number'));
+        $form->text('poc_email', __('Poc Email'));
         $form->hidden('cb', __('Cb'))->value(auth()->user()->name);
         $form->hidden('ub', __('Ub'))->value(auth()->user()->name);
         

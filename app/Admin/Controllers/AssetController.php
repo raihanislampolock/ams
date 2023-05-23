@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Asset;
+use App\Models\AssetTransactions;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -27,19 +28,46 @@ class AssetController extends AdminController
         $grid = new Grid(new Asset());
 
         $grid->column('id', __('Id'));
-        $grid->AssetTypefk()->asset_type_name('Asset Name');
-        $grid->AssetModelfk()->model_name('Model');
-        $grid->column('asset_configuration', __('Asset configuration'));
-        $grid->column('asset_sn_number', __('Asset sn number'));
-        $grid->column('tagging_code', __('Tagging code'));
-        $grid->Vendorfk()->company_name('Vendor Name');
-        $grid->AssetTransactionsfk()->asset_price('Asset Price');
-        $grid->Manufacturerfk()->name('Manufacturer Name');
-        $grid->column('mac_address', __('Mac Address'));
-        $grid->column('servicing_date', __('Servicing date'));
-        $grid->column('remarks', __('Remarks'));
-        $grid->column('cd', __('Cd'));
+        $grid->assetType()->asset_type_name('Asset Name');
+        $grid->assetModel()->model_name('Model');
+        $grid->column('asset_configuration', __('Asset Configuration'));
+        $grid->column('asset_sn_number', __('Asset SN'));
+        $grid->column('tagging_code', __('Tagging Code'));
+
+        $assets = \App\Models\AssetModel::all();
+        $Vendor = [];
+        $Manufacturer = [];
+        foreach ($assets as $asset) {
+            $Vendor[$asset->vendor_id] = $asset->vendor->company_name;
+            $Manufacturer[$asset->manufacturer_id] = $asset->manufacturer->name;
+        }
+        $grid->column('vendor', __('Vendor'))->display(function () use ($Vendor)
+        {
+            return $Vendor[$this->asset_model_id];
+        });
+        $grid->column('manufacturer', __('Manufacturer'))->display(function () use ($Manufacturer)
+        {
+            return $Manufacturer[$this->asset_model_id];
+        });
+
+        $transactions = \App\Models\AssetTransactions::all();
+        $Transaction = [];
         
+        foreach ($transactions as $transaction)
+        {
+            $Transaction[$transaction->asset_model_id] = $transaction->asset_price;
+        }
+        $grid->column('asset_price', __('Asset Price'))->display(function () use ($Transaction)
+        {
+            return $Transaction[$this->asset_model_id];
+        });
+
+        $grid->column('mac_address', __('Mac Address'));
+        $grid->column('servicing_date', __('Servicing Date'))->editable('date');
+        $grid->column('remarks', __('Remarks'))->editable('text');
+        $grid->column('cd', __('Cd'));
+
+        $grid->model()->orderBy('id', 'desc');
 
         return $grid;
     }
@@ -60,9 +88,7 @@ class AssetController extends AdminController
         $show->field('asset_configuration', __('Asset configuration'));
         $show->field('asset_sn_number', __('Asset sn number'));
         $show->field('tagging_code', __('Tagging code'));
-        $show->field('vendor_id', __('Vendor id'));
-        $show->field('asset_transactions_id', __('Asset transactions id'));
-        $show->field('manufacturer_id', __('Manufacturer id'));
+        $show->field('mac_address', __('Mac address'));
         $show->field('servicing_date', __('Servicing date'));
         $show->field('remarks', __('Remarks'));
         $show->field('cb', __('Cb'));
@@ -82,19 +108,20 @@ class AssetController extends AdminController
     {
         $form = new Form(new Asset());
 
-        $AssetType = \App\Models\Asset_Type::pluck('asset_type_name', 'id')->toArray();
+        $AssetType = \App\Models\AssetType::pluck('asset_type_name', 'id')->toArray();
         $form->select('asset_type_id', __('Asset Type'))->options($AssetType);
-        $Model = \App\Models\Asset_Model::pluck('model_name', 'id')->toArray();
-        $form->select('asset_model_id', __('Model Name'))->options($Model);
+
+        $Model = [];
+        $Assets = \App\Models\AssetModel::all();
+        foreach ($Assets as $asset)
+        {
+            $Model[$asset->id] = $asset->asset_model_id . $asset->model_name . ' - ' . $asset->vendor->company_name . ' - ' . $asset->manufacturer->name;
+        }
+        $form->select('asset_model_id', __('Asset Model'))->options($Model);
+        
         $form->text('asset_configuration', __('Asset configuration'));
-        $form->text('asset_sn_number', __('Asset sn number'));
-        $form->text('tagging_code', __('Tagging code'))->default(time())->readonly();
-        $Vendor = \App\Models\Vendor::pluck('company_name', 'id')->toArray();
-        $form->select('vendor_id', __('Vendor Name'))->options($Vendor);
-        $tran = \App\Models\Asset_Transactions::pluck('asset_price', 'id')->toArray();
-        $form->select('asset_transactions_id', __('Asset Price'))->options($tran);
-        $Manu = \App\Models\Manufacturer::pluck('name', 'id')->toArray();
-        $form->select('manufacturer_id', __('Manufacturer'))->options($Manu);
+        $form->text('asset_sn_number', __('Asset SN'));
+        $form->text('tagging_code', __('Tagging Code'))->default(time())->readonly();
         $form->text('mac_address', __('Mac Address'));
         $form->date('servicing_date', __('Servicing date'));
         $form->text('remarks', __('Remarks'));

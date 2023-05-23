@@ -27,28 +27,28 @@ class EmployeeController extends AdminController
         $grid = new Grid(new Employee());
 
         $grid->column('id', __('Id'));
-        $grid->column('emp_id', __('Emp id'));
-        $grid->column('emp_name', __('Emp name'));
-        $grid->column('emp_dept', __('Emp dept'));
+        $grid->column('emp_id', __('Emp Id'));
+        $grid->column('emp_name', __('Emp Name'));
+        $grid->column('emp_dept', __('Emp Dept'));
         $grid->column('designation', __('Designation'));
         $grid->column('status', __('Status'));
         $grid->column('dob', __('Dob'));
         $grid->column('doj', __('Doj'));
-        $grid->column('email_office', __('Email office'));
-        $grid->column('email_personal', __('Email personal'));
-        $grid->column('phone_office', __('Phone office'));
-        $grid->column('phone_personal', __('Phone personal'));
-        $grid->column('blood_group', __('Blood group'));
+        $grid->column('email_office', __('Email Office'));
+        $grid->column('email_personal', __('Email Personal'));
+        $grid->column('phone_office', __('Phone Office'));
+        $grid->column('phone_personal', __('Phone Personal'));
+        $grid->column('blood_group', __('Blood Group'));
         $grid->column('qualification', __('Qualification'));
-        $grid->column('license_no', __('License no'));
+        $grid->column('license_no', __('License No'));
         $grid->column('cd', __('Cd'));
         $grid->column('eventcard', __('Eventcard'));
-        $grid->column('emp_upi', __('Emp upi'));
-        $grid->column('emp_conf_date', __('Emp conf date'));
-        $grid->column('emp_resign_date', __('Emp resign date'));
+        $grid->column('emp_upi', __('Emp Upi'));
+        $grid->column('emp_conf_date', __('Emp Confirm Date'));
+        $grid->column('emp_resign_date', __('Emp Resign Date'));
         $grid->column('gender', __('Gender'));
-        $grid->column('internship_start_date', __('Internship start date'));
-        $grid->column('internship_end_date', __('Internship end date'));
+        $grid->column('internship_start_date', __('Internship Start Date'));
+        $grid->column('internship_end_date', __('Internship End Date'));
 
         return $grid;
     }
