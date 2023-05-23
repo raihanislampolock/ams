@@ -22,7 +22,7 @@
 
 <h3 style="font-size:30px;">Database</h3>
 <p>Create Database</p>
-<p style="font-size:14px; border:2px solid #810054; border-radius:10px; background:#000; padding: 10px;">create database "ams_ast";</p><br><br>
+<p style="font-size:14px; border:2px solid #810054; border-radius:10px; background:#000; padding: 10px;">create database "ams";</p><br><br>
 
 <h3 style="font-size:20px;">Setup Database</h3>
 <p>Go to .env file and Edit values to match your database</p>
