@@ -30,6 +30,10 @@ class AssetLocationController extends AdminController
         $grid->column('asset_location', __('Asset Location'));
         $grid->column('cd', __('Cd'));
 
+        $grid->filter(function ($filter) {
+            $filter->like('asset_location', __('Asset Location'));
+        });
+
         $grid->model()->orderBy('id', 'desc');
 
         return $grid;

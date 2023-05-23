@@ -41,10 +41,13 @@ class AssetController extends AdminController
             $Vendor[$asset->vendor_id] = $asset->vendor->company_name;
             $Manufacturer[$asset->manufacturer_id] = $asset->manufacturer->name;
         }
-        
-        $grid->column('asset_model_id', __('Vendor And Manufacturer'))->display(function ($value) use ($Vendor, $Manufacturer)
+        $grid->column('vendor', __('Vendor'))->display(function () use ($Vendor)
         {
-            return $Vendor[$value] . ' - ' . $Manufacturer[$value] ;
+            return $Vendor[$this->asset_model_id];
+        });
+        $grid->column('manufacturer', __('Manufacturer'))->display(function () use ($Manufacturer)
+        {
+            return $Manufacturer[$this->asset_model_id];
         });
 
         $transactions = \App\Models\AssetTransactions::all();

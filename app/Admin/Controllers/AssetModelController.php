@@ -33,6 +33,10 @@ class AssetModelController extends AdminController
         $grid->column('model_name', __('Model'));
         $grid->column('cd', __('Cd'));
 
+        $grid->filter(function ($filter) {
+            $filter->like('model_name', __('Model'));
+        });
+
         $grid->model()->orderBy('id', 'desc');
 
         return $grid;

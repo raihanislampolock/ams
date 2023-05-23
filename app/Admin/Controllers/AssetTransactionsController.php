@@ -15,7 +15,7 @@ class AssetTransactionsController extends AdminController
      *
      * @var string
      */
-    protected $title = 'AssetTransactions';
+    protected $title = 'Asset Transactions';
 
     /**
      * Make a grid builder.
@@ -34,6 +34,14 @@ class AssetTransactionsController extends AdminController
         $grid->column('asset_purchase_order', __('Asset Purchase Order'));
         $grid->column('asset_warranty_date', __('Asset Warranty Date'));
         $grid->column('cd', __('Cd'));
+
+        $grid->filter(function ($filter) {
+            $filter->like('asset_purchase_request', __('Asset Purchase Request'));
+        });
+
+        $grid->filter(function ($filter) {
+            $filter->like('asset_purchase_order', __('Asset Purchase Order'));
+        });
 
         $grid->model()->orderBy('id', 'desc');
 

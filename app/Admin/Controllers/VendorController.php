@@ -34,6 +34,10 @@ class VendorController extends AdminController
         $grid->column('poc_email', __('Poc Email'));
         $grid->column('cd', __('Cd'));
 
+        $grid->filter(function ($filter) {
+            $filter->like('company_name', __('Company Name'));
+        });
+
         $grid->model()->orderBy('id', 'desc');
 
         return $grid;

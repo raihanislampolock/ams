@@ -31,6 +31,10 @@ class ManufacturerController extends AdminController
         $grid->column('country', __('Country'));
         $grid->column('cd', __('Cd'));
 
+        $grid->filter(function ($filter) {
+            $filter->like('name', __('Name'));
+        });
+
         $grid->model()->orderBy('id', 'desc');
 
         return $grid;

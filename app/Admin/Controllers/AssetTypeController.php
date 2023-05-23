@@ -29,6 +29,10 @@ class AssetTypeController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('asset_type_name', __('Asset Type'));
         $grid->column('cd', __('Cd'));
+        
+        $grid->filter(function ($filter) {
+            $filter->like('asset_type_name', __('Asset Type'));
+        });
 
         $grid->model()->orderBy('id', 'desc');
 
