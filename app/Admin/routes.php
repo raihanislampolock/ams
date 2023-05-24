@@ -11,8 +11,9 @@ Route::group([
     'as'            => config('admin.route.prefix') . '.',
 ], function (Router $router) {
 
-    $router->get('/', 'AssetController@index')->name('home');
+    // $router->get('/', 'AssetController@index')->name('home');
 
+    Route::resource('/', AssetController::class);
     Route::resource('asset', AssetController::class);
     Route::resource('asset-location', AssetLocationController::class);
     Route::resource('asset-model', AssetModelController::class);
