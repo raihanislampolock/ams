@@ -35,31 +35,31 @@ class AssetController extends AdminController
         $grid->column('tagging_code', __('Tagging Code'));
 
         $assets = \App\Models\AssetModel::all();
-        $Vendor = [];
-        $Manufacturer = [];
+        $ven = [];
+        $manu = [];
         foreach ($assets as $asset) {
-            $Vendor[$asset->vendor_id] = $asset->vendor->company_name;
-            $Manufacturer[$asset->manufacturer_id] = $asset->manufacturer->name;
+            $ven[$asset->vendor_id] = $asset->vendor->company_name;
+            $manu[$asset->manufacturer_id] = $asset->manufacturer->name;
         }
-        $grid->column('vendor', __('Vendor'))->display(function () use ($Vendor)
+        $grid->column('vendor', __('Vendor'))->display(function () use ($ven)
         {
-            return $Vendor[$this->asset_model_id];
+            return $ven[$this->asset_model_id];
         });
-        $grid->column('manufacturer', __('Manufacturer'))->display(function () use ($Manufacturer)
+        $grid->column('manufacturer', __('Manufacturer'))->display(function () use ($manu)
         {
-            return $Manufacturer[$this->asset_model_id];
+            return $manu[$this->asset_model_id];
         });
 
         $transactions = \App\Models\AssetTransactions::all();
-        $Transaction = [];
+        $tran = [];
         
         foreach ($transactions as $transaction)
         {
-            $Transaction[$transaction->asset_model_id] = $transaction->asset_price;
+            $tran[$transaction->asset_model_id] = $transaction->asset_price;
         }
-        $grid->column('asset_price', __('Asset Price'))->display(function () use ($Transaction)
+        $grid->column('asset_price', __('Asset Price'))->display(function () use ($tran)
         {
-            return $Transaction[$this->asset_model_id];
+            return $tran[$this->asset_model_id];
         });
 
         $grid->column('mac_address', __('Mac Address'));
@@ -111,13 +111,13 @@ class AssetController extends AdminController
         $AssetType = \App\Models\AssetType::pluck('asset_type_name', 'id')->toArray();
         $form->select('asset_type_id', __('Asset Type'))->options($AssetType);
 
-        $Model = [];
-        $Assets = \App\Models\AssetModel::all();
-        foreach ($Assets as $asset)
+        $model = [];
+        $assets = \App\Models\AssetModel::all();
+        foreach ($assets as $asset)
         {
-            $Model[$asset->id] = $asset->asset_model_id . $asset->model_name . ' - ' . $asset->vendor->company_name . ' - ' . $asset->manufacturer->name;
+            $model[$asset->id] = $asset->asset_model_id . $asset->model_name . ' - ' . $asset->vendor->company_name . ' - ' . $asset->manufacturer->name;
         }
-        $form->select('asset_model_id', __('Asset Model'))->options($Model);
+        $form->select('asset_model_id', __('Asset Model'))->options($model);
         
         $form->text('asset_configuration', __('Asset configuration'));
         $form->text('asset_sn_number', __('Asset SN'));
