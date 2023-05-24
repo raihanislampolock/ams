@@ -8,6 +8,7 @@ use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Database\Eloquent\Builder;
 
 class AssetController extends AdminController
 {
@@ -27,7 +28,7 @@ class AssetController extends AdminController
     {
         $grid = new Grid(new Asset());
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->assetType()->asset_type_name('Asset Name');
         $grid->assetModel()->model_name('Model');
         $grid->column('asset_configuration', __('Asset Configuration'));
@@ -48,7 +49,18 @@ class AssetController extends AdminController
         $grid->column('manufacturer', __('Manufacturer'))->display(function () use ($manu)
         {
             return $manu[$this->asset_model_id];
+          
+        $Model = [];
+        $Assets = \App\Models\AssetModel::all();
+        foreach ($Assets as $asset)
+        {
+            $Model[$asset->id] = $asset->asset_model_id .  $asset->vendor->company_name . ' - ' . $asset->manufacturer->name;
+        }
+        $grid->column('vendor and manufacturer', __('Vendor And Manufacturer'))->display(function () use ($Model)
+        {
+            return $Model[$this->asset_model_id];
         });
+
 
         $transactions = \App\Models\AssetTransactions::all();
         $tran = [];
@@ -56,16 +68,44 @@ class AssetController extends AdminController
         foreach ($transactions as $transaction)
         {
             $tran[$transaction->asset_model_id] = $transaction->asset_price;
+            $Transaction[$transaction->id] = $transaction->asset_price;
+            $PR[$transaction->id] = $transaction->asset_purchase_request;
+            $PO[$transaction->id] = $transaction->asset_purchase_orde
         }
         $grid->column('asset_price', __('Asset Price'))->display(function () use ($tran)
         {
             return $tran[$this->asset_model_id];
         });
+        $grid->column('pr', __('Asset Purchase Request'))->display(function () use ($PR)
+        {
+            return $PR[$this->asset_model_id];
+        });
+        $grid->column('po', __('Asset Purchase Order'))->display(function () use ($PO)
+        {
+            return $PO[$this->asset_model_id];
+        });
 
         $grid->column('mac_address', __('Mac Address'));
         $grid->column('servicing_date', __('Servicing Date'))->editable('date');
         $grid->column('remarks', __('Remarks'))->editable('text');
-        $grid->column('cd', __('Cd'));
+        $grid->column('cd', __('Cd'))->sortable();
+        
+        $grid->quickSearch(function ($model, $query) {
+            $model->orWhereHas('asmodel', function (Builder $queryr) use ($query) {
+                $queryr->where('model_name', 'like', "%{$query}%");
+            });
+            $model->orWhereHas('astype', function (Builder $queryr) use ($query) {
+                $queryr->where('asset_type_name', 'like', "%{$query}%");
+            });
+        });
+
+        $grid->filter(function ($filter) {
+            $filter->like('asset_configuration', __('Asset Configuration'));
+        });
+
+        $grid->filter(function ($filter) {
+            $filter->like('asset_sn_number', __('Asset SN'));
+        });
 
         $grid->model()->orderBy('id', 'desc');
 

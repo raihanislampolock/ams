@@ -26,14 +26,14 @@ class AssetTransactionsController extends AdminController
     {
         $grid = new Grid(new AssetTransactions());
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->assetModel()->model_name('Asset Model');
         $grid->column('asset_price', __('Asset Price'));
-        $grid->column('asset_purchase_date', __('Asset Purchase Date'));
+        $grid->column('asset_purchase_date', __('Asset Purchase Date'))->sortable();
         $grid->column('asset_purchase_request', __('Asset Purchase Request'));
         $grid->column('asset_purchase_order', __('Asset Purchase Order'));
-        $grid->column('asset_warranty_date', __('Asset Warranty Date'));
-        $grid->column('cd', __('Cd'));
+        $grid->column('asset_warranty_date', __('Asset Warranty Date'))->sortable();
+        $grid->column('cd', __('Cd'))->sortable();
 
         $grid->filter(function ($filter) {
             $filter->like('asset_purchase_request', __('Asset Purchase Request'));

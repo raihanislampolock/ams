@@ -20,4 +20,14 @@ class Asset extends Model
     {
         return $this->hasOne(AssetModel::class, 'id', 'asset_model_id');
     }
+
+    public function asmodel()
+    {
+        return $this->belongsTo(AssetModel::class, 'asset_model_id');
+    }
+    public function astype()
+    {
+        return $this->belongsTo(AssetType::class, 'asset_type_id');
+    }
+
 }

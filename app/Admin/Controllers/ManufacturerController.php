@@ -26,10 +26,10 @@ class ManufacturerController extends AdminController
     {
         $grid = new Grid(new Manufacturer());
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->column('name', __('Name'));
         $grid->column('country', __('Country'));
-        $grid->column('cd', __('Cd'));
+        $grid->column('cd', __('Cd'))->sortable();
 
         $grid->filter(function ($filter) {
             $filter->like('name', __('Name'));

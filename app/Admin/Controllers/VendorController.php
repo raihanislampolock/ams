@@ -26,13 +26,13 @@ class VendorController extends AdminController
     {
         $grid = new Grid(new Vendor());
 
-        $grid->column('id', __('Id'));
+        $grid->column('id', __('Id'))->sortable();
         $grid->column('company_name', __('Company Name'));
         $grid->column('company_address', __('Company Address'));
         $grid->column('poc_name', __('Poc Name'));
         $grid->column('poc_number', __('Poc Contact Number'));
         $grid->column('poc_email', __('Poc Email'));
-        $grid->column('cd', __('Cd'));
+        $grid->column('cd', __('Cd'))->sortable();
 
         $grid->filter(function ($filter) {
             $filter->like('company_name', __('Company Name'));
