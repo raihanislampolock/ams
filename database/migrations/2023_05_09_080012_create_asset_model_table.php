@@ -17,7 +17,6 @@ class CreateAssetModelTable extends Migration
             $table->id();
             $table->unsignedbiginteger('asset_type_id');
             $table->unsignedbiginteger('manufacturer_id');
-            $table->unsignedbiginteger('vendor_id');
             $table->string('model_name', 255);
             $table->string('cb', 255)->nullable();
             $table->timestamp('cd')->default(DB::raw('CURRENT_TIMESTAMP'));
@@ -27,7 +26,6 @@ class CreateAssetModelTable extends Migration
 
             $table->foreign('asset_type_id')->references('id')->on('asset_type');
             $table->foreign('manufacturer_id')->references('id')->on('manufacturer');
-            $table->foreign('vendor_id')->references('id')->on('vendor');
         });
     }
 

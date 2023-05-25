@@ -29,7 +29,6 @@ class AssetModelController extends AdminController
         $grid->column('id', __('Id'))->sortable();
         $grid->assetType()->asset_type_name('Asset Type');
         $grid->manufacturer()->name('Manufacturer');
-        $grid->vendor()->company_name('Vendor');
         $grid->column('model_name', __('Model'));
         $grid->column('cd', __('Cd'))->sortable();
 
@@ -55,7 +54,6 @@ class AssetModelController extends AdminController
         $show->field('id', __('Id'));
         $show->field('asset_type_id', __('Asset type id'));
         $show->field('manufacturer_id', __('Manufacturer id'));
-        $show->field('vendor_id', __('Vendor id'));
         $show->field('model_name', __('Model name'));
         $show->field('cb', __('Cb'));
         $show->field('cd', __('Cd'));
@@ -78,12 +76,12 @@ class AssetModelController extends AdminController
         $form->select('asset_type_id', __('Asset Type'))->options($Type);
         $Manufacturer = \App\Models\Manufacturer::pluck('name', 'id')->toArray();
         $form->select('manufacturer_id', __('Manufacturer'))->options($Manufacturer);
-        $Vendor = \App\Models\Vendor::pluck('company_name', 'id')->toArray();
-        $form->select('vendor_id', __('Vendor'))->options($Vendor);
 
         $form->text('model_name', __('Model'));
         $form->hidden('cb', __('Cb'))->value(auth()->user()->name);
         $form->hidden('ub', __('Ub'))->value(auth()->user()->name);
+
+        return $form;
 
         return $form;
     }

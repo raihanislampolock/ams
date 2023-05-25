@@ -2,11 +2,13 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\AssetTransactions;
+use App\Models\Assettransactions;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class AssetTransactionsController extends AdminController
 {
@@ -24,10 +26,28 @@ class AssetTransactionsController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new AssetTransactions());
+        $grid = new Grid(new Assettransactions());
 
         $grid->column('id', __('Id'))->sortable();
-        $grid->assetModel()->model_name('Asset Model');
+        $Type = [];
+        $Model = [];
+        $Assets = \App\Models\Asset::all();
+        foreach ($Assets as $asset)
+        {
+            $Type[$asset->id] = $asset->asset_id . $asset->assetType->asset_type_name;
+            $Model[$asset->id] = $asset->asset_id . $asset->assetModel->model_name;
+        }
+        $grid->column('type', __('Asset Type'))->display(function () use ($Type)
+        {
+            return $Type[$this->asset_id];
+        });
+        $grid->column('model', __('Asset Model'))->display(function () use ($Model)
+        {
+            return $Model[$this->asset_id];
+        });
+
+        $grid->asset()->asset_sn_number('SN Number');
+        $grid->vendor()->company_name('Vendor');
         $grid->column('asset_price', __('Asset Price'));
         $grid->column('asset_purchase_date', __('Asset Purchase Date'))->sortable();
         $grid->column('asset_purchase_request', __('Asset Purchase Request'));
@@ -43,7 +63,14 @@ class AssetTransactionsController extends AdminController
             $filter->like('asset_purchase_order', __('Asset Purchase Order'));
         });
 
+        $grid->quickSearch(function ($model, $query) {
+            $model->orWhereHas('asasset', function (Builder $queryr) use ($query) {
+                $queryr->where('asset_sn_number', 'like', "%{$query}%");
+            });
+        })->placeholder('Search Here Serial Number...');
+
         $grid->model()->orderBy('id', 'desc');
+
 
         return $grid;
     }
@@ -56,10 +83,11 @@ class AssetTransactionsController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(AssetTransactions::findOrFail($id));
+        $show = new Show(Assettransactions::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('asset_model_id', __('Asset model id'));
+        $show->field('asset_id', __('Asset id'));
+        $show->field('vendor_id', __('Vendor id'));
         $show->field('asset_price', __('Asset price'));
         $show->field('asset_purchase_date', __('Asset purchase date'));
         $show->field('asset_purchase_request', __('Asset purchase request'));
@@ -80,11 +108,20 @@ class AssetTransactionsController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new AssetTransactions());
+        $form = new Form(new Assettransactions());
 
-        $Model = \App\Models\AssetModel::pluck('model_name', 'id')->toArray();
-        $form->select('asset_model_id', __('Asset Model'))->options($Model);
-        $form->text('asset_price', __('Asset Price'));
+        $Model = [];
+        $Assets = \App\Models\Asset::all();
+        foreach ($Assets as $asset)
+        {
+            $Model[$asset->id] = $asset->asset_id . $asset->asset_sn_number . ' - ' . $asset->assetType->asset_type_name . ' - ' . $asset->assetModel->model_name;
+        }
+        $form->select('asset_id', __('Asset'))->options($Model);
+
+        $vendor = \App\Models\Vendor::pluck('company_name', 'id')->toArray();
+        $form->select('vendor_id', __('Vendor'))->options($vendor);
+
+        $form->number('asset_price', __('Asset Price'));
         $form->date('asset_purchase_date', __('Asset Purchase Date'))->default(date('Y-m-d'));
         $form->text('asset_purchase_request', __('Asset purchase request'));
         $form->text('asset_purchase_order', __('Asset Purchase Order'));

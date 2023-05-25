@@ -79,7 +79,7 @@ class VendorController extends AdminController
         $form->text('company_name', __('Company Name'));
         $form->text('company_address', __('Company Address'));
         $form->text('poc_name', __('Poc Name'));
-        $form->text('poc_number', __('Poc Contact Number'));
+        $form->mobile('poc_number', __('Poc Contact Number'));
         $form->text('poc_email', __('Poc Email'));
         $form->hidden('cb', __('Cb'))->value(auth()->user()->name);
         $form->hidden('ub', __('Ub'))->value(auth()->user()->name);

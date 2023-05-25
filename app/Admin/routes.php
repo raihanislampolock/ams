@@ -26,4 +26,5 @@ Route::group([
     Route::resource('asset-tracking', AssetTrackingController::class);
 
     $router->get('get-sn', 'AssetTrackingController@getSn');
+    $router->get('get-ast', 'AssetController@getAst');
 });
