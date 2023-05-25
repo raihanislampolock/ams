@@ -44,7 +44,7 @@ class AssetTrackingController extends AdminController
             return $model_name.' ( '.$asset_type_name.')';
         });
 
-        $grid->addColumn('Department & Tagging', 'Department & Tagging Marge')->display(function ()
+        $grid->addColumn('Tagging Id', 'Department & Tagging Marge')->display(function ()
         {
             $department = $this->department->short_name;
             $taggingCode = $this->asset->tagging_code;
@@ -70,7 +70,12 @@ class AssetTrackingController extends AdminController
             $model->orWhereHas('ast', function (Builder $queryr) use ($query) {
                 $queryr->where('asset_sn_number', 'like', "%{$query}%");
             });
-        });
+            $model->orWhereHas('ast', function (Builder $queryr) use ($query) {
+                $queryr->where('mac_address', 'like', "%{$query}%");
+            });
+        })->placeholder('Emp id Name or Dept or sn Or Mac...');
+
+        $grid->disableFilter();
 
 
         $grid->model()->orderBy('id', 'desc');

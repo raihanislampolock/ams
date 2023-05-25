@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAssetTransactionsTable extends Migration
+class CreateAssetTransactionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateAssetTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('asset_transactions', function (Blueprint $table) {
+        Schema::create('asset_transaction', function (Blueprint $table) {
             $table->id();
-            $table->unsignedbiginteger('asset_model_id');
+            $table->unsignedbiginteger('asset_id');
+            $table->unsignedbiginteger('vendor_id');
             $table->string('asset_price', 255);
             $table->date('asset_purchase_date');
             $table->string('asset_purchase_request', 255);
@@ -27,7 +28,8 @@ class CreateAssetTransactionsTable extends Migration
             $table->timestamp('ud')->default(DB::raw('CURRENT_TIMESTAMP'));
 
 
-            $table->foreign('asset_model_id')->references('id')->on('asset_model');
+            $table->foreign('asset_id')->references('id')->on('asset');
+            $table->foreign('vendor_id')->references('id')->on('vendor');
         });
     }
 
@@ -38,6 +40,6 @@ class CreateAssetTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asset_transactions');
+        Schema::dropIfExists('asset_transaction');
     }
 }

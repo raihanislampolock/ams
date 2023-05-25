@@ -9,6 +9,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class AssetController extends AdminController
 {
@@ -39,9 +40,9 @@ class AssetController extends AdminController
         $Assets = \App\Models\AssetModel::all();
         foreach ($Assets as $asset)
         {
-            $Model[$asset->id] = $asset->asset_model_id .  $asset->vendor->company_name . ' - ' . $asset->manufacturer->name;
+            $Model[$asset->id] = $asset->asset_model_id . $asset->manufacturer->name;
         }
-        $grid->column('vendor and manufacturer', __('Vendor And Manufacturer'))->display(function () use ($Model)
+        $grid->column('manufacturer', __('Manufacturer'))->display(function () use ($Model)
         {
             return $Model[$this->asset_model_id];
         });
@@ -49,6 +50,8 @@ class AssetController extends AdminController
 
         $transactions = \App\Models\AssetTransactions::all();
         $Transaction = [];
+        $PR = [];
+        $PO = [];
         
         foreach ($transactions as $transaction)
         {
@@ -56,18 +59,25 @@ class AssetController extends AdminController
             $PR[$transaction->id] = $transaction->asset_purchase_request;
             $PO[$transaction->id] = $transaction->asset_purchase_order;
         }
+        
         $grid->column('asset_price', __('Asset Price'))->display(function () use ($Transaction)
         {
-            return $Transaction[$this->asset_model_id];
+            $asset_model_id = $this->asset_model_id;
+            return isset($Transaction[$asset_model_id]) ? $Transaction[$asset_model_id] : 'N/A';
         });
+        
         $grid->column('pr', __('Asset Purchase Request'))->display(function () use ($PR)
         {
-            return $PR[$this->asset_model_id];
+            $asset_model_id = $this->asset_model_id;
+            return isset($PR[$asset_model_id]) ? $PR[$asset_model_id] : 'N/A';
         });
+        
         $grid->column('po', __('Asset Purchase Order'))->display(function () use ($PO)
         {
-            return $PO[$this->asset_model_id];
+            $asset_model_id = $this->asset_model_id;
+            return isset($PO[$asset_model_id]) ? $PO[$asset_model_id] : 'N/A';
         });
+        
 
         $grid->column('mac_address', __('Mac Address'));
         $grid->column('servicing_date', __('Servicing Date'))->editable('date');
@@ -81,7 +91,7 @@ class AssetController extends AdminController
             $model->orWhereHas('astype', function (Builder $queryr) use ($query) {
                 $queryr->where('asset_type_name', 'like', "%{$query}%");
             });
-        });
+        })->placeholder('Search Here Model or Asset Name...');
 
         $grid->filter(function ($filter) {
             $filter->like('asset_configuration', __('Asset Configuration'));
@@ -132,16 +142,21 @@ class AssetController extends AdminController
     {
         $form = new Form(new Asset());
 
-        $AssetType = \App\Models\AssetType::pluck('asset_type_name', 'id')->toArray();
-        $form->select('asset_type_id', __('Asset Type'))->options($AssetType);
-
-        $Model = [];
-        $Assets = \App\Models\AssetModel::all();
-        foreach ($Assets as $asset)
-        {
-            $Model[$asset->id] = $asset->asset_model_id . $asset->model_name . ' - ' . $asset->vendor->company_name . ' - ' . $asset->manufacturer->name;
+        $AssetTypes = \App\Models\AssetType::all();
+        
+        $Type = [];
+        foreach ($AssetTypes as $assetType) {
+            $Type[$assetType->id] = $assetType->asset_type_name;
         }
-        $form->select('asset_model_id', __('Asset Model'))->options($Model);
+        $form->select('asset_type_id', __('Asset Type'))->options($Type)->load('asset_model_id', '/admin/get-ast');
+
+        $ModelN = [];
+        $Assets = \App\Models\AssetModel::all();
+
+        foreach ($Assets as $asset) {
+            $ModelN[$asset->id] =  $asset->asset_model_id . $asset->model_name . ' - ' . $asset->manufacturer->name;
+        }
+        $form->select('asset_model_id', __('Asset Model'))->options($ModelN);
         
         $form->text('asset_configuration', __('Asset configuration'));
         $form->text('asset_sn_number', __('Asset SN'));
@@ -154,4 +169,31 @@ class AssetController extends AdminController
 
         return $form;
     }
+    // dd()
+
+
+    public function getAst(Request $request)
+    {
+        $assetTypeId = $request->get('q');
+    
+        $models = \App\Models\AssetModel::where('asset_type_id', $assetTypeId)->get();
+    
+        $assetModels = [];
+        foreach ($models as $model) {
+            $assetModels[$model->id] = $model->asset_model_id . $model->model_name . ' - ' . $model->manufacturer->name;
+        }
+        $filteredAssetModels = $this->formatCascading($assetModels);
+        return $filteredAssetModels;
+    }
+
+
+    public function formatCascading($data = [])
+    {
+        $response = [];
+        foreach ($data as $key => $value) {
+            $response[] = ['id' => $key,'text' => $value];
+        }
+        return $response;
+    }
+}
 }
